@@ -41,15 +41,26 @@ public class MoviesInfoService {
     }
 
     public Mono<MovieInfo> updateMovieInfo(MovieInfo movieInfo, String id) {
+//        return movieInfoRepository.findById(id)
+//                .flatMap(movieInfo1 -> {
+//                    movieInfo1.setCast(movieInfo.getCast());
+//                    movieInfo1.setName(movieInfo.getName());
+//                    movieInfo1.setRelease_date(movieInfo.getRelease_date());
+//                    movieInfo1.setYear(movieInfo.getYear());
+//                    return movieInfoRepository.save(movieInfo1);
+//                });
+
+        // Little simple way. Adds one more step but easy to understand.
         return movieInfoRepository.findById(id)
-                .flatMap(movieInfo1 -> {
+                .map(movieInfo1 -> {
                     movieInfo1.setCast(movieInfo.getCast());
                     movieInfo1.setName(movieInfo.getName());
                     movieInfo1.setRelease_date(movieInfo.getRelease_date());
                     movieInfo1.setYear(movieInfo.getYear());
-                    return movieInfoRepository.save(movieInfo1);
-                });
 
+                    return movieInfo1;
+                })
+                .flatMap(movieInfo1 -> movieInfoRepository.save(movieInfo));
 
     }
 
